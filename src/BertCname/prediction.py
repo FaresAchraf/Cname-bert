@@ -2,6 +2,7 @@ import sys
 from os.path import dirname, abspath, join
 import sys
 import warnings
+import pandas as pd
 
 warnings.filterwarnings('ignore', message='foo bar')
 # Find code directory relative to our directory"
@@ -16,14 +17,14 @@ import BertCname.processing.data_management as dm
 DATA_PATH = abspath(join(THIS_DIR, 'data', 'categorical_data.csv'))
 
 
-def get_prediction():
+def get_prediction() -> pd.DataFrame:
     """
-    this is a prediction function
-    :param text: input text
-    :return: tuple
+
+    :return: Bert Model Class Name Prediction
     """
+
     df = dm.load_prediction_data()
-    tokenizer,model = dm.load_Model()
+    tokenizer, model = dm.load_model()
     classifier_pipe = pipe.create_pipeline(model, tokenizer)
     return classifier_pipe.predict(df)
 

@@ -13,13 +13,18 @@ from BertCname.processing import  preprocessors as pp
 from transformers import pipeline
 
 
-def create_pipeline(model, tokenizer=None):
+def create_pipeline(model, tokenizer=None) -> Pipeline:
+    """
+
+    :param model: pretrained Bert model
+    :param tokenizer: pretrained tokenizer
+    :return: Pipeline for prediction or training
+    """
     classifier_pipe = Pipeline([
-                            ("RemovePunct",pp.RemovePunct()),
-                            ("RM_ASCII",pp.RM_ASCII()),
-                            ("RmDigits_Lower",pp.RmDigits_Lower()),
-                            ("Tokenizer",pp.Tokenizer(tokenizer=tokenizer)),
-                            ("Model",pp.Model(model=model))
-                            #("classifier",pp.Classifier(pipe=pipeline(model=model,tokenizer=tokenizer,task='sentiment-analysis')))
+                            ("RemovePunct", pp.RemovePunct()),
+                            ("RM_ASCII", pp.RmAscii()),
+                            ("RmDigits_Lower", pp.RmDigitsLower()),
+                            ("Tokenizer", pp.Tokenizer(tokenizer=tokenizer)),
+                            ("Model", pp.Model(model=model))
     ])
     return classifier_pipe

@@ -38,8 +38,13 @@ def load_pipeline(*, file_name: str) -> Pipeline:
     return saved_pipeline
 
 
-def load_Model(label2id=None, id2label=None):
-    """:cvar"""
+def load_model(label2id: dict = None, id2label: dict = None) -> (BertTokenizer, TFBertForSequenceClassification):
+    """
+
+    :param label2id: dictionary {class:id}
+    :param id2label: dictionary (id:class)
+    :return: (BertTokenizer, TFBertForSequenceClassification)
+    """
     if label2id is None and id2label is None:
         tokenizer = BertTokenizer.from_pretrained(config.TOKENIZER_DIR)
         model = TFBertForSequenceClassification.from_pretrained(config.MODEL_DIR)
@@ -54,7 +59,11 @@ def load_Model(label2id=None, id2label=None):
     return tokenizer, model
 
 
-def load_train_data():
+def load_train_data() -> (pd.DataFrame, dict, dict):
+    """
+    This function load the pretrained classes  and update them using the new training dataset
+    :return: a dataset (pandas DataFrame) ,  dictionary {class:id} , id2label: dictionary (id:class)
+    """
     df = pd.read_csv(config.DATA_PATH)
     id2lable = joblib.load(config.ID2LABEL_PATH)
     label2id = joblib.load(config.LABEL2ID_PATH)
@@ -66,16 +75,20 @@ def load_train_data():
             id2lable[f] = i
             f = f + 1
     after = len(id2lable)
-    if(before!=after):
-        joblib.dump(label2id,config.LABEL2ID_PATH)
-        joblib.dump(id2lable,config.ID2LABEL_PATH)
+    if before != after:
+        joblib.dump(label2id, config.LABEL2ID_PATH)
+        joblib.dump(id2lable, config.ID2LABEL_PATH)
     else:
         print("Same classes")
     df["labels"] = df['cname'].map(label2id)
     return df, label2id, id2lable
 
 
-def load_prediction_data():
+def load_prediction_data() -> pd.DataFrame:
+    """
+
+    :return: the predictionData as pandas DataFrame
+    """
 
     return pd.read_csv(config.DATA_PATH)
 

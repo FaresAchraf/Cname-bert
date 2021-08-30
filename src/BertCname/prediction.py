@@ -37,5 +37,5 @@ if __name__ == '__main__':
     # Parse the argument
     #args = parser.parse_args()
     #print(get_prediction([args.text]))
-
-    print(get_prediction().head())
+    df = get_prediction()
+    print(df.head())

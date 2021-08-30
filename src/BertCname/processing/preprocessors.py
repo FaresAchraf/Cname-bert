@@ -122,18 +122,16 @@ class Model(BaseEstimator, TransformerMixin):
         prediction = self.model.predict(X[1]).logits
         prediction = tf.math.softmax(prediction)
         idx = np.argmax(prediction, axis=-1)
-        df = pd.concat([pd.DataFrame({"Class": list(map(lambda x: (self.model.config.id2label.get(x)), list(idx))),
+        df = pd.concat([pd.DataFrame({'category_id': list(map(lambda x: (self.model.config.id2label.get(x)), list(idx))),
                                         "score": list(np.max(prediction, axis=-1))}), X[0]], axis=1)
         df['algo_name']="Bert_Cname"
         t = time.localtime()
         today = date.today()
-        class2categoryid = joblib.load(config.CLASS2CATEGORYID_PATH)
         d1 = today.strftime("%d/%m/%Y")
         current_time = time.strftime("%H:%M", t)
         df['created'] = str(d1)+" "+current_time
         df['algo_version'] = "1.0.0"
-        df['category_id'] = df['Class'].map(class2categoryid)
-        return df[['category_id', "Class", "score", "created", "algo_name", "algo_version"]]
+        return df[['category_id', "score", "created", "algo_name", "algo_version"]]
 
 
     def fit(self, X, y=None):

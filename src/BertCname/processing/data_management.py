@@ -69,7 +69,7 @@ def load_train_data() -> (pd.DataFrame, dict, dict):
     label2id = joblib.load(config.LABEL2ID_PATH)
     before = len(id2lable)
     f = len(label2id)
-    for i in df['cname']:
+    for i in df['category_id']:
         if i not in label2id:
             label2id[i] = f
             id2lable[f] = i
@@ -80,7 +80,7 @@ def load_train_data() -> (pd.DataFrame, dict, dict):
         joblib.dump(id2lable, config.ID2LABEL_PATH)
     else:
         print("Same classes")
-    df["labels"] = df['cname'].map(label2id)
+    df["labels"] = df['category_id'].map(label2id)
     return df, label2id, id2lable
 
 
